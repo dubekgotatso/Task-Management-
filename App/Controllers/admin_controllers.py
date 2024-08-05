@@ -7,6 +7,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from flask_bcrypt import Bcrypt
 
 def signupAdmin():
+    
     username = request.json.get('username')
     email = request.json.get('email')
     password = request.json.get('password')
