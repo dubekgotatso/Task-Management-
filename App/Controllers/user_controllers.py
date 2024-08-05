@@ -29,7 +29,7 @@ def loginUser():
         return jsonify({'message': 'Username and password are required'}), 400
 
     # Retrieve user from database (adjust based on your implementation)
-    user = User.query.filter_by(username=username).first()
+    user = User.find_user_by_username(username=username).first()
 
     if not user or not check_password_hash(user.password, password):
         return jsonify({'message': 'Invalid username or password'}), 401

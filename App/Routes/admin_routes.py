@@ -3,5 +3,5 @@ from ..Controllers import admin_controllers
 
 app = Blueprint('admin', __name__)
 
-app.route('/signup', methods=['GET', 'POST'])(admin_controllers.signupAdmin)
+app.route('/signup_admin', methods=['GET', 'POST'])(admin_controllers.signupAdmin)
 
