@@ -1,11 +1,18 @@
 from .. import mongo
 
 class Admin:
-      def create_user(signupdetails):
-        existing_user = Admin.find_user_by_username_or_email(signupdetails['username'], signupdetails['email'])
+      def find_user_by_username(username):
+        # Implement your logic to find a user by username from the database
+        existing_user = mongo.db.signup.find_one({'username': username})
+        return existing_user
+
+    
+      def create_user(username, email, password):
+        existing_user = Admin.find_user_by_username(username)
         if existing_user:
-            return False  # User already exists
+            return None  # User already exists
         else:
             # Insert the new user into the database
-            mongo.db.signup.insert_one(signupdetails)
-            return True  # User created successfully
+            new_user = {'username': username, 'email': email, 'password': password}
+            mongo.db.signup.insert_one(new_user)
+            return new_user

@@ -1,25 +1,32 @@
 from bson.objectid import*
 from ..Models.admin import Admin
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, jsonify, session, request, redirect, url_for,flash, render_template
 import re
-from flask import Flask, jsonify, session, request, redirect, url_for, flash, render_template
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
+from flask_bcrypt import Bcrypt
 
-def signup():
-    if request.method == 'POST':
-        # Extract form data
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
+def signupAdmin():
+    username = request.json.get('username')
+    email = request.json.get('email')
+    password = request.json.get('password')
 
-        # Validate email format
-        email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
-        if not re.match(email_regex, email):
-            flash('Invalid email format. Please try again.', 'error')
-            return redirect(url_for('signup'))
+    if not username or not password:
+        return jsonify({'message': 'Username and password are required'}), 400
 
-        # Check if user already exists
-        signupdetails = {'username': username, 'email': email, 'password': password}
-        if not Admin.create_user(signupdetails):
-            flash('Email or username already exists. Please try again with different credentials.', 'error')
-            return redirect(url_for('user.login'))
+    # Check if user already exists
+    existing_user = Admin.find_user_by_username(username)
+    if existing_user:
+        return jsonify({'message': 'User already exists'}), 400
+
+    # Create new user
+    hashed_password = generate_password_hash(password, method='sha256')
+    new_user = Admin.create_user(username, email, hashed_password)
+    
+    if not new_user:
+        return jsonify({'message': 'Failed to create user'}), 500
+
+    access_token = create_access_token(identity=new_user.id)
+    
+    return jsonify({'message': 'User created successfully', 'access_token': access_token}), 201
         
