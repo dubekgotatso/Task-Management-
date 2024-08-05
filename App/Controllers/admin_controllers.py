@@ -29,4 +29,21 @@ def signupAdmin():
     access_token = create_access_token(identity=new_user.id)
     
     return jsonify({'message': 'User created successfully', 'access_token': access_token}), 201
+
+def loginAdmin():
+    username = request.json.get('username')
+    password = request.json.get('password')
+
+    if not username or not password:
+        return jsonify({'message': 'Username and password are required'}), 400
+
+    # Retrieve user from database (adjust based on your implementation)
+    user = Admin.find_user_by_username(username=username).first()
+
+    if not user or not check_password_hash(user.password, password):
+        return jsonify({'message': 'Invalid username or password'}), 401
+
+    access_token = create_access_token(identity=user.id)
+    
+    return jsonify({'message': 'Login successful', 'access_token': access_token}), 200
         
