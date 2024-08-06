@@ -7,21 +7,12 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from flask_bcrypt import Bcrypt
 
 def signup_admin():
-    if request.method == 'POST':
-        username = request.json.get('username')
-        email = request.json.get('email')
-        password = request.json.get('password')
-        
-        if not username or not email or not password:
-            return jsonify({'message': 'Username, email, and password are required'}), 400
-        
-        # Hash the password using Werkzeug's generate_password_hash()
-        hashed_password = generate_password_hash(password)
-        
-        # Added the 'contact' field
-        new_user = {'username': username, 'email': email, 'password': hashed_password}
-        
-        Admin.create_user(new_user)
-        
-        return jsonify(new_user)
+        user_data={
+        'username' : request.json.get('username'),
+        'email' :request.json.get('email'),
+        'password' : request.json.get('password')
+    }
+    
+        Admin.create_user(user_data)
+        return ({"message": "Successfully signup"})
         

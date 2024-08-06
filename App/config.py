@@ -1,2 +1,2 @@
 class Config:
-    MONGO_URI = "mongodb+srv://kgotatsosurprise303:AWPtDOFTi8ixjvYf@cluster0.8wfjsky.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    MONGO_URI = "mongodb://localhost:27017/MiniProject"
