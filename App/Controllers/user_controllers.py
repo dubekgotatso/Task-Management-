@@ -18,6 +18,12 @@ def signup_user():
         if not username or not email or not password:
             return jsonify({'message': 'Username, email, and password are required'}), 400
         
+        
+        
+        existing_user = User.find_user_by_username(username)
+        if existing_user:
+            return jsonify({'message': 'User already exists'}), 400
+        
         # Hash the password using Werkzeug's generate_password_hash()
         hashed_password = generate_password_hash(password)
         
