@@ -16,3 +16,14 @@ def signup_admin():
         Admin.create_user(user_data)
         return ({"message": "Successfully signup"})
         
+        
+def login_admin():
+        username = request.json.get('username')
+        password = request.json.get('password')
+        
+        Admin.find_user_by_username(username, password)
+        # User authentication logic here
+
+    # If authentication successful
+    # Generate and return a token as a response
+        return jsonify({'token': 'your_generated_token_here'})

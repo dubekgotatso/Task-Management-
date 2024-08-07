@@ -1,7 +1,7 @@
 from .. import mongo
 from flask import jsonify
 
-class User:
+class User_Admin:
    
     
     def create_user(user_data):
