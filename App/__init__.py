@@ -9,6 +9,8 @@ def create_app():
     app.config.from_object(Config)
     
     mongo.init_app(app)
+    
+    
     with app.app_context():
      from .Routes import user_routes, admin_routes
     

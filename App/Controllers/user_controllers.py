@@ -9,29 +9,6 @@ import jwt
 from datetime import datetime, timedelta
 
 
-def register_admin(username, password, email):
-    # Add logic to handle admin registration, e.g., assign special roles or permissions
-    # For simplicity, this function just creates an admin user with the same process as regular users
-    user_data = {
-        'username': username,
-        'email': email,
-        'password': password,
-        'role': 'admin'
-    }
-    result = User_Admin.create_user(user_data)
-    return result
-
-def register_user(username, password, email):
-    # Add logic to handle regular user registration
-    user_data = {
-        'username': username,
-        'email': email,
-        'password': password,
-        'role': 'user'
-    }
-    result = User_Admin.create_user(user_data)
-    return result
-
 def signup():
     # Extract user data from request
     username = request.json.get('username')
@@ -44,7 +21,7 @@ def signup():
         return jsonify({
             'message': 'Username, email, password, and role are required',
             'username': username,
-            'email': email
+            'email': email,
         }), 400
 
     # Hash the password
@@ -52,9 +29,9 @@ def signup():
 
     # Register the user based on their role
     if role == 'admin':
-        user_id = register_admin(username, hashed_password, email)
-    else:
-        user_id = register_user(username, hashed_password, email)
+        user_id = User_Admin.create_user(username, hashed_password, email)
+    else: role == 'user'
+    user_id = User_Admin.create_user(username, hashed_password, email)
 
     # Generate a JWT
     payload = {
@@ -91,30 +68,6 @@ def login():
     else:
         return jsonify({'error': 'Invalid username or password'}), 401
 
-def register_admin(username, password, email):
-    # Implement your admin registration logic here
-         user_data = {
-        'username': username,
-        'email': email,
-        'password': password,
-        'role': 'admin'
-    }
-         result = User_Admin.create_user(user_data)
-         return result==1       
-    # and return the admin's unique identifier (e.g., admin ID)
-         
-
-def register_user(username, password, email):
-    # Implement your user registration logic here
-        user_data = {
-        'username': username,
-        'email': email,
-        'password': password,
-        'role': 'admin'
-    }
-        result = User_Admin.create_user(user_data)
-        return result==2
-    # and return the user's unique identifier (e.g., user ID)
     
 
 
