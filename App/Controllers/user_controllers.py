@@ -9,40 +9,25 @@ import jwt
 from datetime import datetime, timedelta
 
 
-def signup():
-    # Extract user data from request
-    username = request.json.get('username')
-    email = request.json.get('email')
-    password = request.json.get('password')
-    role = request.json.get('role')
-
-    # Validate input
-    if not username or not email or not password or not role:
-        return jsonify({
-            'message': 'Username, email, password, and role are required',
-            'username': username,
-            'email': email,
-        }), 400
-
-    # Hash the password
-    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-
-    # Register the user based on their role
-    if role == 'admin':
-        user_id = User_Admin.create_user(username, hashed_password, email)
-    else: role == 'user'
-    user_id = User_Admin.create_user(username, hashed_password, email)
-
-    # Generate a JWT
-    payload = {
-        'user_id': user_id,
-        'role': role,
-        'exp': datetime.utcnow() + timedelta(hours=1)
-    }
-    token = jwt.encode(payload, os.environ.get('SECRET_KEY'), algorithm='HS256')
-
-    # Return the token to the client
-    return jsonify({'token': token.decode('utf-8')}), 201
+def signup_user():
+    if request.method == 'POST':
+        username = request.json.get('username')
+        contact = request.json.get('contact')
+        email = request.json.get('email')
+        password = request.json.get('password')
+        
+        if not username or not email or not password:
+            return jsonify({'message': 'Username, email, and password are required'}), 400
+        
+        # Hash the password using Werkzeug's generate_password_hash()
+        hashed_password = generate_password_hash(password)
+        
+        # Added the 'contact' field
+        new_user = {'username': username, 'contact': contact, 'email': email, 'password': hashed_password}
+        
+        User_Admin.create_user(new_user)
+        
+        return jsonify(new_user)
 
 
 def login():

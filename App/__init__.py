@@ -1,5 +1,6 @@
 from .config import Config
 from flask import Flask
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
 from flask_pymongo import PyMongo
 
 mongo = PyMongo()
@@ -10,7 +11,7 @@ def create_app():
     
     mongo.init_app(app)
     
-    
+    jwt = JWTManager
     with app.app_context():
      from .Routes import user_routes, admin_routes
     
