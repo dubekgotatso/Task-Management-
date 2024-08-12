@@ -17,10 +17,10 @@ def create_app():
     jwt.init_app(app)
     
     with app.app_context():
-     from .Routes import user_routes, admin_routes
+     from .Routes import user_routes
     
      app.register_blueprint(user_routes.app)
-     app.register_blueprint(admin_routes.app)
+     
 
         
     return app
